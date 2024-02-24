@@ -1,4 +1,4 @@
-from microservicio_recalculo_objetivos.app import Entrenamiento, EntrenamientoSchema, Resource
+from .app import Entrenamiento, EntrenamientoSchema, Resource
 
 entrenamiento_schema = EntrenamientoSchema()
 

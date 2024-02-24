@@ -1,5 +1,5 @@
-from microservicio_recalculo_objetivos.app import db, Entrenamiento, EntrenamientoSchema, Resource, request, Redis, Queue, datetime
-from microservicio_recalculo_objetivos import sender
+from .app import db, Entrenamiento, EntrenamientoSchema, Resource, request, Redis, Queue, datetime
+from .sender import send_entrenamiento
 
 q = Queue(connection=Redis(host='localhost', port=6379, db=0))
 entrenamiento_schema = EntrenamientoSchema()
@@ -15,5 +15,5 @@ class EntrenamientoResourceC(Resource):
         )
         db.session.add(new_entrenamiento)
         db.session.commit()
-        q.enqueue(sender.send_entrenamiento, entrenamiento_schema.dump(new_entrenamiento))
+        q.enqueue(send_entrenamiento, entrenamiento_schema.dump(new_entrenamiento))
         return entrenamiento_schema.dump(new_entrenamiento)
