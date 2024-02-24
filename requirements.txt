@@ -1,0 +1,8 @@
+flask
+Flask-RESTful
+flask_sqlalchemy
+flask_marshmallow
+SQLAlchemy
+marshmallow-sqlalchemy
+redis
+rq
