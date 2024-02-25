@@ -1,6 +1,8 @@
 import redis
 from flask import Flask
-
+import datetime 
+import time
+import threading
 
 app = Flask(__name__)
 
@@ -13,18 +15,31 @@ r = redis.Redis(
     decode_responses=True
 )
 
-
 @app.route('/')
 def hello():
     return 'Hola, soy el microservicio 1'
 
-while True:
-    s: int = 1
-    e: int = 101
-    for i in range(s, e, 1):
-        message = "Ping: " + str(i) + " de "+ str(e-1)
+def send_ping():
+    for i in range(s, e):
+        message = {'Ping_Estado' : i, 'Fecha' : str(datetime.datetime.now())}
         print(message)
         i=i+1
-        r.publish("EstadoSalud", message)
-        if i==e:
+        r.publish("EstadoSalud", str(message))
+        time.sleep(3)
+        if i == e:
             exit()
+
+
+
+s: int = 1
+e: int = 101
+t1 = threading.Thread(target=send_ping)
+t1.start()
+while True:
+    servicioMonitor = r.pubsub()
+    servicioMonitor.subscribe('RespuestadeEstadoSalud')
+    for message in servicioMonitor.listen():
+        msg_json = str(message['data'])
+        message_rta = {'Ping_recibido' : msg_json, 'Fecha' : str(datetime.datetime.now())}
+        print(message_rta) 
+    
