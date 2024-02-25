@@ -15,18 +15,18 @@ r = redis.Redis(
     decode_responses=True
 )
 
+@app.route('/')
+def hello():
+    return 'Hola, soy el microservicio de recalculo de objetivos de entrenamiento'
+
 class RespuestaEstadoSalud:
    def __init__(self, nombre, tiempo, respuesta):
     self.nombre = nombre
     self.tiempo = tiempo
     self.respuesta = respuesta
 
-@app.route('/')
-def hello():
-    return 'Hola, soy el microservicio de diagnostico de estado medico de salud'
-
 servicioMonitor = r.pubsub()
-servicioMonitor.subscribe('EstadoMicroservicioDiagnostico')
+servicioMonitor.subscribe('EstadoMicroservicioRecalculo')
 
 for message in servicioMonitor.listen():
     print(message) 
@@ -48,6 +48,6 @@ for message in servicioMonitor.listen():
     
     tiempo_final = time.time()   
     
-    estado_salud = RespuestaEstadoSalud('MicroservicioDiagnostico', (tiempo_final-tiempo_inicial), numero)       
+    estado_salud = RespuestaEstadoSalud('MicroservicioRecalculo', (tiempo_final-tiempo_inicial), numero)       
     if(numero == 3 or numero == 2):
-        r.publish("RTA_EstadoMicroservicioDiagnostico", json.dumps(estado_salud.__dict__))
+        r.publish("RTA_EstadoMicroservicioRecalculo", json.dumps(estado_salud.__dict__))
