@@ -19,6 +19,12 @@ def hello():
     return 'Hola, soy el microservicio 1'
 
 while True:
-    message = input("Ingrese el mensaje: ")
-
-    r.publish("EstadoSalud", message)
+    s: int = 1
+    e: int = 101
+    for i in range(s, e, 1):
+        message = "Ping: " + str(i) + " de "+ str(e-1)
+        print(message)
+        i=i+1
+        r.publish("EstadoSalud", message)
+        if i==e:
+            exit()
