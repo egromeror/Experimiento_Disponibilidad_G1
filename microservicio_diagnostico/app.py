@@ -48,6 +48,6 @@ for message in servicioMonitor.listen():
     
     tiempo_final = time.time()   
     
-    estado_salud = RespuestaEstadoSalud('MicroservicioDiagnostico', (tiempo_final-tiempo_inicial), numero)       
+    estado_salud = RespuestaEstadoSalud('RTA_MicroservicioDiagnostico', (tiempo_final-tiempo_inicial), numero)       
     if(numero == 3 or numero == 2):
         r.publish("RTA_EstadoMicroservicioDiagnostico", json.dumps(estado_salud.__dict__))
